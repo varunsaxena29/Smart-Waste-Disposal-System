@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garbage Collection Route</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Garbage Collection Route Optimizer</h1>
+        <button id="getRouteBtn">Get Optimized Route</button>
+        <div id="map"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Garbage Collection System</p>
+    </footer>
+
+    <!-- Leaflet.js JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize map (Centered on India)
+        var map = L.map('map').setView([20.5937, 78.9629], 5); // Center at India's latitude and longitude with a zoom level of 5
+
+        // Load OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Create truck icon
+        var truckIcon = L.icon({
+            iconUrl: '{{ url_for("static", filename="C:\Users\VARUN SAXENA\OneDrive\Desktop\4th year project\templates\images\truck-icon.png") }}',
+            iconSize: [40, 40],
+            iconAnchor: [20, 40]
+        });
+
+        var truckMarker;
+
+        // Function to move the truck along the route
+        function animateTruck(route) {
+            let i = 0;
+            const move = () => {
+                if (i < route.length) {
+                    const [lat, lng] = route[i].location;
+                    if (truckMarker) {
+                        truckMarker.setLatLng([lat, lng]); // Move truck to next point
+                    } else {
+                        truckMarker = L.marker([lat, lng], { icon: truckIcon }).addTo(map);
+                    }
+                    map.setView([lat, lng], 13); // Center map on truck's location
+                    i++;
+                    setTimeout(move, 2000); // Move every 2 seconds
+                }
+            };
+            move();
+        }
+
+        // Button event listener to fetch and display the route
+        document.getElementById('getRouteBtn').addEventListener('click', function() {
+            fetch('/get_route')
+                .then(response => response.json())
+                .then(data => {
+                    const route = data.map(step => {
+                        const match = step.match(/location \((\d+\.\d+), (\d+\.\d+)\)/);
+                        if (match) {
+                            return { location: [parseFloat(match[1]), parseFloat(match[2])] };
+                        }
+                    }).filter(Boolean);
+
+                    // Start animation
+                    animateTruck(route);
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
