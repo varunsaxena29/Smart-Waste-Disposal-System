@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Disposal System</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: url('https://thumbs.dreamstime.com/z/multicolored-bins-labeled-different-types-waste-showcasing-implementation-circular-economy-management-system-318143027.jpg?ct=jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: #343a40;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: auto;
+            position: relative;
+        }
+
+        /* Dark overlay to improve contrast */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        /* Main Container Styling */
+        .container {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Main Heading Styling */
+        #main-heading {
+            font-size: 34px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 20px;
+            font-family: 'Roboto', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* Sub Heading and Text Styles */
+        .subtitle {
+            font-size: 18px;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Button Styling */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        button i {
+            font-size: 18px;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Map Container Styling */
+        #map-container {
+            display: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 350px;
+            height: 350px;
+            border: 2px solid #4CAF50;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background-color: white;
+            overflow: auto;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Close Map Button Styling */
+        #closeMapBtn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        #closeMapBtn:hover {
+            background-color: #c82333;
+        }
+
+        /* Location Result and Route Text */
+        #locationResult {
+            margin-top: 10px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        #routeResult {
+            margin-top: 20px;
+            font-style: italic;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Truck Loading Animation */
+        /* Keyframe animation that loops continuously */
+        .truck-container {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin: 20px auto; /* Center the truck container */
+        }
+
+        .road {
+            width: 100%;
+            height: 5px;
+            background-color: gray;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            z-index: -1; /* Behind the truck */
+        }
+
+        .truck {
+            position: absolute;
+            top: 0;
+            left: -60px; /* Start off-screen */
+            width: 60px;
+            height: 30px;
+            background: url('https://cdn-icons-png.flaticon.com/128/3256/3256319.png') no-repeat center center;
+            background-size: contain;
+        }
+
+        /* Update animation to loop continuously */
+        .animate {
+            animation: moveTruck 5s linear infinite; /* Infinite loop */
+        }
+
+        @keyframes moveTruck {
+            0% {
+                left: -60px; /* Start off-screen */
+            }
+            100% {
+                left: calc(100% + 60px); /* Move truck off-screen */
+            }
+        }
+
+        /* Card Layout for Routes */
+        .route-card {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            text-align: left;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .route-card h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .route-card button {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            #map-container {
+                width: 90%;
+                height: 300px;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1 id="main-heading">Smart Waste Disposal System</h1>
+        <span class="subtitle"><i>Clean Cities, Smarter Solutions</i></span>
+
+        <h2>Get Your Current Location</h2>
+        <button id="getLocationBtn"><i class="fas fa-map-marker-alt"></i> Get Location</button>
+        <p id="locationResult">Current Location: Not Set</p>
+
+        <h2>Get Optimized Garbage Collection Route</h2>
+        <button id="getRouteBtn"><i class="fas fa-route"></i> Get Route</button>
+        <div class="truck-container" id="loadingTruck" style="display: none;">
+            <div class="road"></div>
+            <div class="truck" id="truck"></div>
+        </div>
+        <p id="routeResult"></p>
+
+        <button id="openMapBtn"><i class="fas fa-map"></i> Open Map</button>
+    </div>
+
+    <div id="map-container">
+        <button id="closeMapBtn">Close Map</button>
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        let map, userMarker, currentLocation = null;
+
+        document.getElementById('getLocationBtn').addEventListener('click', function () {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    currentLocation = { lat, lng };
+
+                    fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('locationResult').innerText = `Current Location: ${data.display_name}`;
+                        });
+                }, (error) => {
+                    console.error('Error obtaining location:', error);
+                    alert('Unable to retrieve your location. Please enable location services.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        });
+
+        document.getElementById('getRouteBtn').addEventListener('click', function () {
+            if (!currentLocation) {
+                alert('Please get your current location first.');
+                return;
+            }
+
+            document.getElementById('loadingTruck').style.display = "block";
+            document.getElementById('truck').classList.add('animate');
+
+            // Fetch the optimized route from the Flask backend
+            fetch('/get_route')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Construct the route result string
+                    let routeDescription = "Optimized Route:\n";
+                    data.route.forEach(bin => {
+                        routeDescription += `Go to ${bin.location_name} (Fill Level: ${bin.fill_level})\n`;
+                    });
+
+                    // Update route result on the UI
+                    document.getElementById('routeResult').innerText = routeDescription;
+
+                    // Hide truck loading animation
+                    document.getElementById('loadingTruck').style.display = "none";
+                    document.getElementById('truck').classList.remove('animate');
+                })
+                .catch(error => {
+                    console.error("Error fetching route data:", error);
+                    alert("Error fetching route data: " + error.message);
+                    document.getElementById('routeResult').innerText = "Failed to fetch route data.";
+                    document.getElementById('loadingTruck').style.display = "none";
+                    document.getElementById('truck').classList.remove('animate');
+                });
+        });
+
+        document.getElementById('openMapBtn').addEventListener('click', function () {
+            document.getElementById('map-container').style.display = "block";
+            initMap();
+        });
+
+        document.getElementById('closeMapBtn').addEventListener('click', function () {
+            document.getElementById('map-container').style.display = "none";
+            if (map) {
+                map.remove();
+            }
+        });
+
+        function initMap() {
+            if (!currentLocation) {
+                alert('Please get your current location first.');
+                return;
+            }
+
+            map = L.map('map').setView([currentLocation.lat, currentLocation.lng], 13);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+            }).addTo(map);
+
+            userMarker = L.marker([currentLocation.lat, currentLocation.lng]).addTo(map)
+                .bindPopup('You are here!')
+                .openPopup();
+        }
+    </script>
+</body>
+
+</html>

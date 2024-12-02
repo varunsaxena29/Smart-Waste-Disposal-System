@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Waste Disposal System</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body and Fonts */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header layout */
+.header {
+  display: flex; /* Flexbox for horizontal layout */
+  align-items: center; /* Vertically center logo and title */
+  background-color: #000; /* Background color for header */
+  color: white; /* White text color */
+  padding: 10px 20px; /* Padding around header */
+}
+
+/* Logo styling */
+.logo {
+  width: 80px; /* Reduced width of the logo */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 15px; /* Space between logo and title */
+}
+
+/* Title (Company Name) styling */
+.title {
+  font-family: 'Allan';/* Stylish, cursive font */
+  font-weight: normal; /* Use normal weight for cursive font */
+  font-size: 2.5em; /* Reduce font size to fit next to the logo */
+  color: #4CAF50; /* Set title color (green) */
+  text-transform: uppercase; /* Uppercase letters */
+  letter-spacing: 3px; /* Increase space between letters */
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+  margin: 0; /* Remove default margin */
+}
+
+/* Navbar styling */
+.navbar {
+  display: flex;
+  gap: 15px; /* Space between navbar items */
+  margin-left: auto; /* Push navbar items to the right */
+}
+
+.navbar a {
+  color: white; /* Navbar link color */
+  text-decoration: none; /* Remove underline */
+}
+
+.navbar a:hover {
+  color: #4CAF50; /* Hover effect (green) */
+}
+
+/* CTA button styling */
+.cta-button {
+  padding: 10px 20px;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+        /* Hero Section */
+        .hero {
+            background: url('https://www.uffizio.com/wp-content/uploads/2024/01/ADAS-17-1-2.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            padding: 5em 2em;
+            position: relative;
+        }
+
+        .hero .hero-content {
+            max-width: 800px;
+            margin: auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5em;
+            font-weight: 900;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+        }
+
+        .hero .cta-button {
+            background-color: #1db954;
+            color: white;
+            padding: 0.75em 2em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .hero .cta-button:hover {
+            background-color: #17a646;
+        }
+
+        /* Features Section */
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 2em;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.feature-item {
+    width: 30%;
+}
+
+.feature-item h3 {
+    color: #1CDA62FF;
+    margin-bottom: 0.5em;
+}
+
+.map-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.map-item {
+    display: flex;
+    justify-content: space-between; /* This ensures the text and image are pushed to the left and right */
+    align-items: center;
+    gap: 20px;
+    width: 90%;
+    max-width: 1000px;
+    opacity: 0; /* Start hidden for animation */
+    transform: translateY(30px); /* Slide in effect */
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.map-image {
+    width: 35%; /* Reduced size of the images */
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* Adjust margins for zig-zag layout */
+.map-item:nth-child(odd) .map-image {
+    margin-right: auto; /* Align image to left for odd items */
+}
+
+.map-item:nth-child(odd) .map-text {
+    text-align: left; /* Text stays left aligned */
+}
+
+.map-item:nth-child(even) .map-image {
+    margin-left: auto; /* Align image to right for even items */
+}
+
+.map-item:nth-child(even) .map-text {
+    text-align: right; /* Text stays right aligned */
+}
+
+.map-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align text to start */
+    max-width: 55%; /* Adjust text width to fit the reduced image size */
+}
+
+.map-step {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #4CAF50;
+    background-color: #E8F5E9;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.map-text h3 {
+    font-size: 1.25em;
+    color: #333;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.map-text p {
+    font-size: 1em;
+    color: #555;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Animation triggers */
+.animate.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.map-image:hover {
+    transform: scale(1.05); /* Slight zoom on hover for effect */
+}
+
+.label {
+    display: inline-block;
+    background-color: #e0f7e0;
+    color: #34a853;
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    line-height: 40px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.text-container p {
+    font-size: 1rem;
+    color: #333;
+    margin: 0;
+}
+/* Hover effect on images */
+.map-image:hover {
+    transform: scale(1.05);
+}
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr; /* Stacks images in a single column */
+    }
+}
+
+/* Footer Basic Styles */
+
+footer {
+    background-color: #000; /* Dark background */
+    color: #ffffff;
+    padding: 60px 20px 40px; /* Increased top padding */
+    font-family: Arial, sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.footer-section {
+    flex: 1 1 200px; /* Flexible width, minimum 200px */
+    margin: 10px;
+}
+
+.footer-section h3 {
+    font-size: 18px;
+    color: #00c853; /* Accent color for headings */
+    margin-bottom: 10px;
+}
+
+.footer-section p,
+.footer-section li,
+.footer-section a {
+    font-size: 14px;
+    color: #d1d1d1;
+    line-height: 1.6;
+}
+
+.footer-section a {
+    color: #00c853; /* Link color */
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: #ffffff; /* Hover effect for links */
+}
+
+/* List Styles */
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 8px;
+}
+
+/* Newsletter Form Styles */
+.footer-section.newsletter form {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-section.newsletter input[type="email"] {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.footer-section.newsletter button {
+    padding: 10px;
+    background-color: #00c853;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.footer-section.newsletter button:hover {
+    background-color: #009624; /* Darker green on hover */
+}
+
+/* Social Links Inline Styling */
+.footer-section.social a {
+    display: inline-block;
+    margin-right: 15px;
+    font-size: 18px;
+}
+
+/* Footer Legal & Copyright */
+.footer-section.legal,
+.footer-section.copyright {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #a9a9a9;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 20px 0;
+    }
+}
+        /* Login Popup */
+
+        .login-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+            padding: 2em;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .login-popup h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+
+        .login-popup input {
+            width: 100%;
+            padding: 0.75em;
+            margin: 0.5em 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .login-popup .cta-button {
+            background-color: #1db954;
+            color: white;
+            padding: 0.75em;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1em;
+            transition: background-color 0.3s;
+        }
+
+        .login-popup .cta-button:hover {
+            background-color: #17a646;
+        }
+
+        .login-popup .close-button {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 0.5em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5em;
+            font-size: 1em;
+        }
+
+        .login-popup .close-button:hover {
+            background-color: #e33e3e;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        } 
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+
+<header class="header">   
+ <img src="https://bcassetcdn.com/social/1dorw1qyvc/preview.png" alt="Company Logo" class="logo">
+    <h1 class="title">Sensibin</h1>
+    <nav class="navbar">
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+        <a href="#">News</a>
+        <a href="#">Alerts</a>
+        <a href="#">Language</a>
+        <button class="cta-button" onclick="window.location.href='mailto:swastedisposalsystemindia@gmail.com'">Get in Touch</button>
+    </nav>
+</header>
+
+    <!-- Hero Section -->
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Smart Waste Disposal System</h1>
+            <p>Data-driven waste management solutions to optimize city cleanliness and reduce costs.</p>
+            <button class="cta-button" onclick="openLoginPopup()">Login</button>
+        </div>
+    </section>
+
+     <!-- Features Section -->
+
+    <section class="features">
+        <div class="feature-item">
+            <h3>Real-time data</h3>
+            <p>Monitor waste levels in real-time for efficient management.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Easy-to-integrate</h3>
+            <p>Seamlessly integrate with your existing infrastructure.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Digital database</h3>
+            <p>Centralized database of bin locations and routes.</p>
+        </div>
+    </section>
+
+     <!-- map -->
+
+     <section class="map-preview">
+        <div class="map-item animate">
+            <img src="https://sensoneo.com/wp-content/uploads/2023/02/post-kielce-1-1.png" alt="Map preview showing waste bin locations" class="map-image">
+            <div class="map-text">
+                <div class="map-step">01</div>
+                <h3>Efficient Waste Management</h3>
+                <p>This map displays the locations of waste bins to optimize collection routes, ensuring cleaner environments.</p>
+            </div>
+        </div>
+
+        <div class="map-item reverse animate">
+            <div class="map-text">
+                <div class="map-step">02</div>
+                <h3>Smart Waste Disposal</h3>
+                <p>The system enables real-time tracking of waste levels in bins, allowing for efficient and timely collection.</p>
+            </div>
+            <img src="https://img.freepik.com/free-vector/garbage-collection-isometric-poster_1284-10131.jpg?semt=ais_hybrid" alt="Map preview showing waste bin locations" class="map-image">
+        </div>
+
+        <div class="map-item animate">
+            <img src="https://www.fleetrobo.com/blog/wp-content/uploads/2020/04/smart-waste-management-solution-768x576.png" alt="Smart waste management solution" class="map-image">
+            <div class="map-text">
+                <div class="map-step">03</div>
+                <h3>Innovative Waste Solutions</h3>
+                <p>This image highlights the integration of software in waste management, making operations more efficient and sustainable.</p>
+            </div>
+        </div>
+
+        <div class="map-item reverse animate">
+            <div class="map-text">
+                <div class="map-step">04</div>
+                <h3>Advanced Waste Management</h3>
+                <p>This service utilizes IoT technology to provide data-driven waste solutions for urban areas.</p>
+            </div>
+            <img src="https://www.sigfox.com/wp-content/uploads/2022/12/Sensoneo-Factory-Waste-Management-opt.jpg" alt="IoT in waste management" class="map-image">
+        </div>
+    </section>    
+    
+    <!-- Login Popup -->
+
+    <div id="overlay" class="overlay" onclick="closeLoginPopup()"></div>
+    <div class="login-popup">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="pincode">Area Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
+            <button type="submit" class="cta-button">Login</button>
+        </form>
+        <div id="error-message" style="color: red; display: none;"></div>
+        <button class="close-button" onclick="closeLoginPopup()">Close</button>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const items = document.querySelectorAll(".map-item");
+        
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            }, { threshold: 0.1 });
+        
+            items.forEach(item => {
+                observer.observe(item);
+            });
+        });
+        
+        // Open login popup
+        function openLoginPopup() {
+            document.getElementById("overlay").style.display = "block";
+            document.querySelector(".login-popup").style.display = "block";
+        }
+
+        // Close login popup
+        function closeLoginPopup() {
+            document.getElementById("overlay").style.display = "none";
+            document.querySelector(".login-popup").style.display = "none";
+        }
+
+        // Form submit handling
+        document.addEventListener("DOMContentLoaded", function() {
+            const loginForm = document.getElementById("loginForm");
+
+            loginForm.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const pincode = document.getElementById("pincode").value;
+                const password = document.getElementById("password").value;
+
+                // Prepare data to send to backend
+                const data = {
+                    pincode: pincode,
+                    password: password
+                };
+
+                // Send login data to backend using Fetch API
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "/main";
+                // Redirect to main page if login is successful
+                    } else {
+                        document.getElementById("error-message").innerText = data.message;
+                        document.getElementById("error-message").style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById("error-message").innerText = "An error occurred. Please try again.";
+                    document.getElementById("error-message").style.display = 'block';
+                });
+            });
+        });
+    </script>
+    <footer>
+        <div class="footer-content">
+            <!-- About Us Section -->
+            <div class="footer-section about">
+                <h3>About Us</h3>
+                <p>We provide innovative waste management solutions to promote sustainability and efficiency in waste disposal.</p>
+            </div>
+            
+            <!-- Services Section -->
+            <div class="footer-section services">
+                <h3>Services</h3>
+                <ul>
+                    <li>Waste Fill Level Monitoring</li>
+                    <li>Route Planning</li>
+                    <li>Smart Waste for Factories</li>
+                    <li>Smart Waste for Facilities</li>
+                    <li>Collection Efficiency Analysis</li>
+                    <li>Digitized Ecological Islands</li>
+                    <li>Waste Asset Management</li>
+                    <li>Water Level Monitoring</li>
+                    <li>Consultancy</li>
+                    <li>National Waste Management</li>
+                </ul>
+            </div>
+            
+            <!-- Contact Section -->
+            <div class="footer-section contact">
+                <h3>Contact Us</h3>
+                <p>Email: swastedisposalsystemindia.com</p>
+                <p>Phone: 0522 234 456</p>
+                <p>Address: 123 Waste Management Delhi, Green City</p>
+            </div>
+            
+            <!-- Social Media Links Section -->
+            <div class="footer-section social">
+                <h3>Follow Us</h3>
+                <a href="https://facebook.com" target="_blank">Facebook</a>
+                <a href="https://twitter.com" target="_blank">Twitter</a>
+                <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+            </div>
+    
+            <!-- Quick Links Section -->
+            <div class="footer-section quick-links">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
+                </ul>
+            </div>
+    
+            <!-- Newsletter Signup Section -->
+            <div class="footer-section newsletter">
+                <h3>Subscribe to Our Newsletter</h3>
+                <form>
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+            
+            <!-- Legal Section -->
+            <div class="footer-section legal">
+                <p><a href="privacy-policy.html">Privacy Policy</a> | <a href="terms-of-service.html">Terms of Service</a></p>
+            </div>
+    
+            <!-- Copyright Section -->
+            <div class="footer-section copyright">
+                <p>&copy; 2024 Waste Management Solutions. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer 
+    <footer class="footer">
+        <p>&copy; 2024 Smart Waste Disposal System. All rights reserved.</p>
+        <nav class="footer-nav">
+            <a href="#">About</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms of Service</a>
+        </nav>
+    </footer> -->
+</body>
+</html>
